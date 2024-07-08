@@ -1,0 +1,30 @@
+﻿@inherits LayoutComponentBase
+@using ActivosControles.util.Respuesta
+@inject NavigationManager Navigation
+@inject Blazored.SessionStorage.ISessionStorageService session
+
+<div class="auth-layout">
+    @Body
+</div>
+
+@code {
+    private bool isInitialized;
+    private bool isLoginPage;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !isInitialized)
+        {
+            var usuariosesion = await session.GetItemAsync<usuariosesion>("SesionUsuario");
+            isLoginPage = Navigation.Uri.EndsWith("/login");
+
+            if (usuariosesion == null && !isLoginPage)
+            {
+                Navigation.NavigateTo("/login");
+            }
+            
+            isInitialized = true;
+            StateHasChanged();
+        }
+    }
+}

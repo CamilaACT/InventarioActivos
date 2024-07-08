@@ -1,0 +1,17 @@
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\bin\Debug\net7.0\ActivosControles.model.deps.json
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\bin\Debug\net7.0\ActivosControles.model.dll
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\bin\Debug\net7.0\ActivosControles.model.pdb
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\bin\Debug\net7.0\ActivosControles.data.dll
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\bin\Debug\net7.0\ActivosControles.util.dll
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\bin\Debug\net7.0\ActivosControles.data.pdb
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\bin\Debug\net7.0\ActivosControles.util.pdb
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\obj\Debug\net7.0\ActivosControles.model.csproj.AssemblyReference.cache
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\obj\Debug\net7.0\ActivosControles.model.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\obj\Debug\net7.0\ActivosControles.model.AssemblyInfoInputs.cache
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\obj\Debug\net7.0\ActivosControles.model.AssemblyInfo.cs
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\obj\Debug\net7.0\ActivosControles.model.csproj.CoreCompileInputs.cache
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\obj\Debug\net7.0\ActivosControles.model.csproj.CopyComplete
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\obj\Debug\net7.0\ActivosControles.model.dll
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\obj\Debug\net7.0\refint\ActivosControles.model.dll
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\obj\Debug\net7.0\ActivosControles.model.pdb
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.model\obj\Debug\net7.0\ref\ActivosControles.model.dll

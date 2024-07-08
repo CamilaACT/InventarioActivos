@@ -1,0 +1,355 @@
+﻿@page "/"
+@using ActivosControles.Data;
+@using ActivosControles.util.Request;
+@using ActivosControles.util.Respuesta;
+@inject Blazored.SessionStorage.ISessionStorageService session
+@inject IHttpClientFactory HttpClientFactory
+@layout MainLayout
+@inherits LayoutComponentBase
+
+<PageTitle>Index</PageTitle>
+
+<h1>KC2 AUTOMATIZACIÓN</h1>
+
+<div>
+    <label for="domainInput">Ingrese el dominio de su organización para empezar con el escaneo de activos:</label>
+    <input type="text" id="domainInput" @bind="domain" />
+    <button @onclick="GetSubdomains">Escanear Subdominios</button>
+    <button @onclick="GetReferrerFiles">Obtener Archivos Referidos</button>
+    <button @onclick="GetCommunicatingFiles">Obtener Archivos Comunicantes</button>
+    <button @onclick="GetHistoricalSslCertificates">Obtener Certificados SSL Históricos</button>
+
+</div>
+
+@if (subdomains != null)
+{
+    <h2>Subdominios encontrados:</h2>
+    <ul>
+        @foreach (var subdomain in subdomains)
+        {
+            <li>@subdomain</li>
+        }
+    </ul>
+}
+
+@if (referrerFiles != null)
+{
+    <h2>Archivos referidos:</h2>
+    <ul>
+        @foreach (var file in referrerFiles)
+        {
+            @if (file?.attributes != null)
+            {
+                <li>
+                    <h3>@file.type</h3>
+                    <p>Nombres: @string.Join(", ", file.attributes.names)</p>
+                    <p>Magika: @file.attributes.magika</p>
+                </li>
+            }
+        }
+    </ul>
+}
+
+@if (meaningfulNames != null)
+{
+    <h2>Archivos Comunicantes:</h2>
+    <ul>
+        @foreach (var name in meaningfulNames)
+        {
+            <li>@name</li>
+        }
+    </ul>
+}
+
+@if (sslCertDetails != null)
+{
+    <h2>Certificados SSL Históricos:</h2>
+    <ul>
+        @foreach (var detail in sslCertDetails)
+        {
+            <li>@detail</li>
+        }
+    </ul>
+}
+
+@code {
+    private string domain;
+    private List<string> subdomains;
+    private List<DataItem> referrerFiles;
+    private usuariosesion sesionusua = new usuariosesion();
+    private List<string> meaningfulNames;
+    private List<string> sslCertDetails;
+
+
+    private async Task GetSubdomains()
+    {
+        sesionusua = await session.GetItemAsync<usuariosesion>("SesionUsuario");
+
+        activoAccion activoaccion = new activoAccion();
+
+        var httpClient = HttpClientFactory.CreateClient("BinaryEdgeClient");
+        var response = await httpClient.GetAsync($"https://api.binaryedge.io/v2/query/domains/subdomain/{domain}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var result = await response.Content.ReadFromJsonAsync<ApiResult>();
+            subdomains = result?.Events;
+
+            if (subdomains != null)
+            {
+                foreach (var subdomain in subdomains)
+                {
+
+                    activorequest activo = new activorequest();
+                    activo.or_codigo = sesionusua.or_id;
+                    activo.us_codigo = sesionusua.us_id;
+                    activo.ta_codigo = "1";
+                    activo.ac_nombre = subdomain;
+
+                    activoaccion.guardarActivos(activo);
+                }
+            }
+        }
+        else
+        {
+            // Manejar respuesta de error
+            subdomains = new List<string> { "Error al obtener los subdominios." };
+        }
+    }
+
+    private async Task GetCommunicatingFiles()
+    {
+
+        sesionusua = await session.GetItemAsync<usuariosesion>("SesionUsuario");
+
+        activoAccion activoaccion = new activoAccion();
+        try
+        {
+            var httpClient = HttpClientFactory.CreateClient("VirusTotalClient");
+            var response = await httpClient.GetAsync($"https://www.virustotal.com/api/v3/domains/{domain}/communicating_files");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<CommunicatingFilesResponse>();
+                meaningfulNames = result?.data.Select(d => d.attributes.meaningful_name).ToList();
+                if (meaningfulNames != null)
+                {
+                    foreach (var name in meaningfulNames)
+                    {
+                        activorequest activo = new activorequest();
+                        activo.or_codigo = sesionusua.or_id;
+                        activo.us_codigo = sesionusua.us_id;
+                        activo.ta_codigo = "3";
+                        activo.ac_nombre = name;
+
+                        activoaccion.guardarActivos(activo);
+                    }
+                }
+
+            }
+            else
+            {
+                // Manejar respuesta de error
+                meaningfulNames = new List<string> { "Error al obtener los archivos comunicantes." };
+            }
+        }
+        catch (Exception ex)
+        {
+            // Manejar excepción
+            Console.WriteLine(ex.Message);
+            meaningfulNames = new List<string> { "Error al obtener los archivos comunicantes." };
+        }
+    }
+
+    private class ApiResult
+    {
+        public string Query { get; set; }
+        public int Page { get; set; }
+        public int Pagesize { get; set; }
+        public int Total { get; set; }
+        public List<string> Events { get; set; }
+    }
+
+    private async Task GetReferrerFiles()
+    {
+        sesionusua = await session.GetItemAsync<usuariosesion>("SesionUsuario");
+        activoAccion activoaccion = new activoAccion();
+        try
+        {
+            var httpClient = HttpClientFactory.CreateClient("VirusTotalClient");
+            var response = await httpClient.GetAsync($"domains/{domain}/referrer_files");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<ApiResponse>();
+                referrerFiles = result?.data;
+
+                if (referrerFiles != null)
+                {
+                    foreach (var file in referrerFiles)
+                    {
+                        if (file?.attributes != null)
+                        {
+                            foreach (var name in file.attributes.names)
+                            {
+                                activorequest activo = new activorequest();
+                                activo.or_codigo = sesionusua.or_id;
+                                activo.us_codigo = sesionusua.us_id;
+                                activo.ta_codigo = "4";
+                                activo.ac_nombre = name;
+
+                                activoaccion.guardarActivos(activo);
+                            }
+                        }
+                    }
+                }
+
+            }
+            else
+            {
+                // Handle error response
+                referrerFiles = new List<DataItem>();
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle exception
+            Console.WriteLine(ex.Message);
+            referrerFiles = new List<DataItem>();
+        }
+    }
+
+
+
+    private async Task GetHistoricalSslCertificates()
+    {
+        sesionusua = await session.GetItemAsync<usuariosesion>("SesionUsuario");
+        activoAccion activoaccion = new activoAccion();
+        try
+        {
+            var httpClient = HttpClientFactory.CreateClient("VirusTotalClient");
+            var response = await httpClient.GetAsync($"https://www.virustotal.com/api/v3/domains/{domain}/historical_ssl_certificates");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<HistoricalSslCertificatesResponse>();
+                sslCertDetails = result?.data.Select(d => $"{d.type}: {d.attributes.thumbprint}").ToList();
+
+
+                if (sslCertDetails != null)
+                {
+                    foreach (var detail in sslCertDetails)
+                    {
+                        activorequest activo = new activorequest();
+                        activo.or_codigo = sesionusua.or_id;
+                        activo.us_codigo = sesionusua.us_id;
+                        activo.ta_codigo = "2";
+                        activo.ac_nombre = detail;
+
+                        activoaccion.guardarActivos(activo);
+                    }
+                }
+            }
+            else
+            {
+                // Manejar respuesta de error
+                sslCertDetails = new List<string> { "Error al obtener los certificados SSL históricos." };
+            }
+        }
+        catch (Exception ex)
+        {
+            // Manejar excepción
+            Console.WriteLine(ex.Message);
+            sslCertDetails = new List<string> { "Error al obtener los certificados SSL históricos." };
+        }
+    }
+
+
+    private class ApiResponse
+    {
+        public List<DataItem> data { get; set; }
+    }
+
+    public class DataItem
+    {
+        public string id { get; set; }
+        public string type { get; set; }
+        public Links links { get; set; }
+        public Attributes attributes { get; set; }
+    }
+
+    public class Links
+    {
+        public string self { get; set; }
+    }
+
+    public class Attributes
+    {
+        public List<string> names { get; set; }
+        public string magika { get; set; }
+        public long last_analysis_date { get; set; }
+        public string type_description { get; set; }
+        public Dictionary<string, AnalysisResult> last_analysis_results { get; set; }
+    }
+
+    public class AnalysisResult
+    {
+        public string engine_name { get; set; }
+        public string result { get; set; }
+    }
+
+
+    public class CommunicatingFilesResponse
+    {
+        public List<CommunicatingFileData> data { get; set; }
+        public Meta meta { get; set; }
+        public Links links { get; set; }
+    }
+
+    public class CommunicatingFileData
+    {
+        public CommunicatingFileAttributes attributes { get; set; }
+    }
+
+    public class CommunicatingFileAttributes
+    {
+        public string meaningful_name { get; set; }
+        // Otros campos que necesites
+    }
+
+    public class Meta
+    {
+        public int count { get; set; }
+    }
+
+    public class HistoricalSslCertificatesResponse
+    {
+        public List<SslCertificateData> data { get; set; }
+        public Meta meta { get; set; }
+        public Links links { get; set; }
+    }
+
+    public class SslCertificateData
+    {
+        public string id { get; set; }
+        public string type { get; set; }
+        public SslCertificateAttributes attributes { get; set; }
+        public ContextAttributes context_attributes { get; set; }
+    }
+
+    public class SslCertificateAttributes
+    {
+        public string thumbprint { get; set; }
+        // Otros campos que necesites
+    }
+
+    public class ContextAttributes
+    {
+        public string port { get; set; }
+        public string first_seen_date { get; set; }
+    }
+
+
+
+
+}

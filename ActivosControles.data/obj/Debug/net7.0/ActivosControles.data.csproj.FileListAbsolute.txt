@@ -1,0 +1,12 @@
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.data\bin\Debug\net7.0\ActivosControles.data.deps.json
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.data\bin\Debug\net7.0\ActivosControles.data.dll
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.data\bin\Debug\net7.0\ActivosControles.data.pdb
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.data\obj\Debug\net7.0\ActivosControles.data.csproj.AssemblyReference.cache
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.data\obj\Debug\net7.0\ActivosControles.data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.data\obj\Debug\net7.0\ActivosControles.data.AssemblyInfoInputs.cache
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.data\obj\Debug\net7.0\ActivosControles.data.AssemblyInfo.cs
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.data\obj\Debug\net7.0\ActivosControles.data.csproj.CoreCompileInputs.cache
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.data\obj\Debug\net7.0\ActivosControles.data.dll
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.data\obj\Debug\net7.0\refint\ActivosControles.data.dll
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.data\obj\Debug\net7.0\ActivosControles.data.pdb
+C:\Users\camil\Documents\UDLA\Sexto\Seguridad\ProyectoFinal\ActivosControles.data\obj\Debug\net7.0\ref\ActivosControles.data.dll

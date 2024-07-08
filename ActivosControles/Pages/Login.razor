@@ -1,0 +1,121 @@
+﻿@page "/login"
+@using ActivosControles.util.Request
+@using ActivosControles.util.Respuesta
+@using ActivosControles.Data
+@inject Blazored.SessionStorage.ISessionStorageService session
+@inject NavigationManager Navigation
+
+<section class="background-radial-gradient overflow-hidden">
+    <style>
+        .background-radial-gradient {
+            background-color: hsl(218, 41%, 15%);
+            background-image: radial-gradient(650px circle at 0% 0%, hsl(218, 41%, 35%) 15%, hsl(218, 41%, 30%) 35%, hsl(218, 41%, 20%) 75%, hsl(218, 41%, 19%) 80%, transparent 100%), radial-gradient(1250px circle at 100% 100%, hsl(218, 41%, 45%) 15%, hsl(218, 41%, 30%) 35%, hsl(218, 41%, 20%) 75%, hsl(218, 41%, 19%) 80%, transparent 100%);
+        }
+
+        #radius-shape-1 {
+            height: 220px;
+            width: 220px;
+            top: -60px;
+            left: -130px;
+            background: radial-gradient(#44006b, #ad1fff);
+            overflow: hidden;
+        }
+
+        #radius-shape-2 {
+            border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+            bottom: -60px;
+            right: -110px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(#44006b, #ad1fff);
+            overflow: hidden;
+        }
+
+        .bg-glass {
+            background-color: hsla(0, 0%, 100%, 0.9) !important;
+            backdrop-filter: saturate(200%) blur(25px);
+        }
+    </style>
+
+    <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+        <div class="row gx-lg-5 align-items-center mb-5">
+            <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+                <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+                    KC2 <br />
+                    <span style="color: hsl(218, 81%, 75%)">
+                        Knowledge Centered
+                        Cybersecurity
+                    </span>
+                </h1>
+                <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
+                    "KC2” se fundamenta en OSINT o Inteligencia de Fuentes Abiertas.KC2” categoriza los activos basándose en la metodología MAGERIT. Usando
+                    específicamente el tipo [S] Servicios.Una vez que se han clasificado los activos, “KC2” propone asignarlos valor cualitativamente.
+                    “KC2” solo implementa 4 de las 5 dimensiones de valoración de activos propuestos por
+                    MAGERIT:
+                    1. [A] Autenticidad
+                    2. [C] Confidencialidad de la información
+                    3. [I] Integridad de los datos
+                    4. [D] Disponibilidad
+                </p>
+            </div>
+
+            <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+                <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+                <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+
+                <div class="card bg-glass">
+                    <div class="card-body px-4 py-5 px-md-5">
+                        <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <InputText id="usuario" class="form-control" @bind-Value="loginModel.login" />
+                                <label class="form-label" for="usuario">Usuario</label>
+                            </div>
+
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <InputText id="form3Example4" type="password" class="form-control" @bind-Value="loginModel.contrasenia" />
+                                <label class="form-label" for="form3Example4">Contraseña</label>
+                            </div>
+
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4" @onclick="HandleLogin">
+                                Iniciar Sesión
+                            </button>
+                        </EditForm>
+                        @if (!string.IsNullOrEmpty(errorMessage))
+                        {
+                            <div class="alert alert-danger">@errorMessage</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+    private usuario loginModel = new usuario();
+    private loginAccion loginaccion = new loginAccion();
+    private usuariosesion usuariosesion = new usuariosesion();
+
+    private usuariosesion prueba = new usuariosesion();
+
+    private string errorMessage;
+
+    private async Task HandleLogin()
+    {
+        usuariosesion = loginaccion.log(loginModel);
+        if (usuariosesion.CodigoError == -1)
+        {
+            await session.SetItemAsync("SesionUsuario", usuariosesion);
+            Navigation.NavigateTo("/");
+
+
+        }
+        else
+        {
+            errorMessage = "Error autenticación";
+        }
+    }
+}

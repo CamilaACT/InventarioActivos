@@ -1,0 +1,98 @@
+@page "/reportviewer"
+@using ActivosControles.util.Respuesta;
+@using Telerik.ReportViewer.Blazor
+@inject Blazored.SessionStorage.ISessionStorageService session
+@layout MainLayout
+
+<style>
+    .trv-report-viewer {
+        width: 1300px;
+        height: 880px;
+    }
+</style>
+
+<EditForm Model="@this">
+    <button type="button" class="btn btn-primary" @onclick="UpdateReport">Actualizar Reporte</button>
+</EditForm>
+
+@if (estado == 1)
+{
+    <ReportViewer @ref="reportViewer"
+                  ViewerId="rv1"
+                  ServiceUrl="/api/reports"
+                  ScaleMode="@(ScaleMode.Specific)"
+                  Scale="1.0"
+                  EnableAccessibility="true" />
+}
+
+@code {
+    private ReportViewer reportViewer;
+    private usuariosesion sesionusua = new usuariosesion();
+    private int estado;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await inicializarListaAsync();
+    }
+
+    private async Task inicializarListaAsync()
+    {
+        try
+        {
+            sesionusua = await session.GetItemAsync<usuariosesion>("SesionUsuario");
+
+            if (sesionusua == null)
+            {
+                // Manejar el caso donde la sesión no se recupera correctamente
+                Console.WriteLine("No se pudo recuperar la sesión del usuario.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al recuperar la sesión del usuario: {ex.Message}");
+        }
+    }
+
+    void UpdateReport()
+    {
+        int or_codigo;
+        int us_codigo;
+        estado = 1;
+
+        if (!int.TryParse(sesionusua.or_id, out or_codigo))
+        {
+            or_codigo = 0;
+        }
+
+        if (!int.TryParse(sesionusua.us_id, out us_codigo))
+        {
+            us_codigo = 0;
+        }
+
+        try
+        {
+            if (reportViewer != null)
+            {
+                var reporte = new ReportSourceOptions
+                    {
+                        Report = "SampleReport.trdp",
+                        Parameters = new Dictionary<string, object>
+                    {
+                        { "or_id", or_codigo },
+                        { "us_id", us_codigo }
+                    }
+                    };
+
+                reportViewer.SetReportSourceAsync(reporte);
+            }
+            else
+            {
+                Console.WriteLine("reportViewer es null.");
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error al actualizar el reporte: {e.Message}");
+        }
+    }
+}

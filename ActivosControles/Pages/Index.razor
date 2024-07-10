@@ -13,12 +13,14 @@
 
 <div>
     <label for="domainInput">Ingrese el dominio de su organización para empezar con el escaneo de activos:</label>
-    <input type="text" id="domainInput" @bind="domain" />
-    <button @onclick="GetSubdomains">Escanear Subdominios</button>
-    <button @onclick="GetReferrerFiles">Obtener Archivos Referidos</button>
-    <button @onclick="GetCommunicatingFiles">Obtener Archivos Comunicantes</button>
-    <button @onclick="GetHistoricalSslCertificates">Obtener Certificados SSL Históricos</button>
+    <input type="text" id="domainInput" class="form-control mb-3" @bind="domain" />
 
+    <div class="btn-group" role="group" aria-label="Grupo de botones">
+        <button class="btn btn-primary" @onclick="GetSubdomains" disabled="@validaciones.Contains("1")">@(!validaciones.Contains("1") ? "Escanear Subdominios" : "Subdominios ya escaneados")</button>
+        <button class="btn btn-secondary" @onclick="GetReferrerFiles" disabled="@validaciones.Contains("4")">@(!validaciones.Contains("4") ? "Obtener Archivos Referidos" : "Archivos Referidos ya obtenidos")</button>
+        <button class="btn btn-success" @onclick="GetCommunicatingFiles" disabled="@validaciones.Contains("3")">@(!validaciones.Contains("3") ? "Obtener Archivos Comunicantes" : "Archivos Comunicantes ya obtenidos")</button>
+        <button class="btn btn-info" @onclick="GetHistoricalSslCertificates" disabled="@validaciones.Contains("2")">@(!validaciones.Contains("2") ? "Obtener Certificados SSL Históricos" : "Certificados SSL Históricos ya obtenidos")</button>
+    </div>
 </div>
 
 @if (subdomains != null)
@@ -79,10 +81,25 @@
     private usuariosesion sesionusua = new usuariosesion();
     private List<string> meaningfulNames;
     private List<string> sslCertDetails;
+    private List<string> validaciones = new List<string>();
+    private validarEscaneo escaneo = new validarEscaneo();
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        validaciones = await session.GetItemAsync<List<string>>("Validaciones") ?? new List<string>();
+    }
+
+
+
 
 
     private async Task GetSubdomains()
+
     {
+
+
         sesionusua = await session.GetItemAsync<usuariosesion>("SesionUsuario");
 
         activoAccion activoaccion = new activoAccion();
@@ -108,6 +125,9 @@
 
                     activoaccion.guardarActivos(activo);
                 }
+                // Actualizar validaciones después de guardar activos
+                validaciones = escaneo.validar(sesionusua.or_id.ToString());
+                await session.SetItemAsync("Validaciones", validaciones);
             }
         }
         else
@@ -144,6 +164,9 @@
 
                         activoaccion.guardarActivos(activo);
                     }
+
+                    validaciones = escaneo.validar(sesionusua.or_id.ToString());
+                    await session.SetItemAsync("Validaciones", validaciones);
                 }
 
             }
@@ -200,6 +223,8 @@
 
                                 activoaccion.guardarActivos(activo);
                             }
+                            validaciones = escaneo.validar(sesionusua.or_id.ToString());
+                            await session.SetItemAsync("Validaciones", validaciones);
                         }
                     }
                 }
@@ -248,6 +273,8 @@
 
                         activoaccion.guardarActivos(activo);
                     }
+                    validaciones = escaneo.validar(sesionusua.or_id.ToString());
+                    await session.SetItemAsync("Validaciones", validaciones);
                 }
             }
             else

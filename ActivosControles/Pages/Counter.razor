@@ -1,18 +1,134 @@
 ﻿@page "/counter"
-@layout MainLayout
-<PageTitle>Counter</PageTitle>
 
-<h1>Counter</h1>
+@using System.Collections.Generic
+@using ActivosControles.Data;
+@using ActivosControles.util.Request;
 
-<p role="status">Current count: @currentCount</p>
+@inject NavigationManager Navigation
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<section class="background-radial-gradient overflow-hidden">
+    <style>
+        .background-radial-gradient {
+            background-color: hsl(218, 41%, 15%);
+            background-image: radial-gradient(650px circle at 0% 0%, hsl(218, 41%, 35%) 15%, hsl(218, 41%, 30%) 35%, hsl(218, 41%, 20%) 75%, hsl(218, 41%, 19%) 80%, transparent 100%), radial-gradient(1250px circle at 100% 100%, hsl(218, 41%, 45%) 15%, hsl(218, 41%, 30%) 35%, hsl(218, 41%, 20%) 75%, hsl(218, 41%, 19%) 80%, transparent 100%);
+        }
+
+        #radius-shape-1 {
+            height: 220px;
+            width: 220px;
+            top: -60px;
+            left: -130px;
+            background: radial-gradient(#44006b, #ad1fff);
+            overflow: hidden;
+        }
+
+        #radius-shape-2 {
+            border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+            bottom: -60px;
+            right: -110px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(#44006b, #ad1fff);
+            overflow: hidden;
+        }
+
+        .bg-glass {
+            background-color: hsla(0, 0%, 100%, 0.9) !important;
+            backdrop-filter: saturate(200%) blur(25px);
+        }
+    </style>
+
+    <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+
+      
+        <div class="row gx-lg-5 align-items-center mb-5">
+            <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+                <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+                    Registrar organización <br />
+                    <span style="color: hsl(218, 81%, 75%)">
+                        Knowledge Centered
+                        Cybersecurity KC2
+                    </span>
+                </h1>
+                <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
+                    Ingrese los datos para registrar a su organización y al responsable del inventario de activos
+                </p>
+            </div>
+
+            <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+                <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+                <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+
+                <div class="card bg-glass">
+                    <div class="card-body px-4 py-5 px-md-5">
+                        <EditForm Model="@organizacion" OnValidSubmit="AddCompany">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <InputText id="orgNombre" class="form-control" @bind-Value="organizacion.or_nombre" />
+                                <label class="form-label" for="orgNombre">Nombre de la Organización</label>
+                            </div>
+
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <InputText id="orgDescripcion" class="form-control" @bind-Value="organizacion.or_descripcion" />
+                                <label class="form-label" for="orgDescripcion">Descripción de la Organización</label>
+                            </div>
+
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <InputText id="usNombre" class="form-control" @bind-Value="organizacion.us_nombre" />
+                                <label class="form-label" for="usNombre">Nombre del Representante</label>
+                            </div>
+
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <InputText id="usApellido" class="form-control" @bind-Value="organizacion.us_apellido" />
+                                <label class="form-label" for="usApellido">Apellidos del Representante</label>
+                            </div>
+
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <InputText id="usCedula" class="form-control" @bind-Value="organizacion.us_cedula" />
+                                <label class="form-label" for="usCedula">Cédula del Representante</label>
+                            </div>
+
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <InputText id="usuario" class="form-control" @bind-Value="organizacion.us_usuario" />
+                                <label class="form-label" for="usuario">Usuario</label>
+                            </div>
+
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <InputText id="contrasenia" type="password" class="form-control" @bind-Value="organizacion.us_contrasenia" />
+                                <label class="form-label" for="contrasenia">Contraseña</label>
+                            </div>
+
+                            <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">
+                                Registrar Compañía
+                            </button>
+                        </EditForm>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 @code {
-    private int currentCount = 0;
 
-    private void IncrementCount()
+    private registraOrganizacionRequest organizacion = new registraOrganizacionRequest();
+
+
+
+    private void AddCompany()
     {
-        currentCount++;
+        
+
+
+        registraOrganizacion registraOrga = new registraOrganizacion();
+
+
+        registraOrga.organizacion(organizacion);
+
+        Navigation.NavigateTo("/login");
+        
     }
+
 }

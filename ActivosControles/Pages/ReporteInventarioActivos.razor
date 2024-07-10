@@ -4,26 +4,107 @@
 @inject Blazored.SessionStorage.ISessionStorageService session
 @layout MainLayout
 
+<PageTitle>Definición de Tipos</PageTitle>
+
 <style>
     .trv-report-viewer {
         width: 1300px;
         height: 880px;
     }
+
+    .report-container {
+        text-align: center;
+        margin: 20px;
+    }
+
+    .report-header {
+        margin-bottom: 20px;
+    }
+
+        .report-header h1 {
+            margin-bottom: 10px;
+        }
+
+        .report-header p {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+    .button-container {
+        margin-bottom: 20px;
+    }
+
+    .table-container {
+        margin: 20px auto;
+        width: 80%;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f4f4f4;
+    }
 </style>
 
-<EditForm Model="@this">
-    <button type="button" class="btn btn-primary" @onclick="UpdateReport">Actualizar Reporte</button>
-</EditForm>
+<div class="report-container">
+    <div class="report-header">
+        <h1>Definición de Tipos</h1>
+    </div>
 
-@if (estado == 1)
-{
-    <ReportViewer @ref="reportViewer"
-                  ViewerId="rv1"
-                  ServiceUrl="/api/reports"
-                  ScaleMode="@(ScaleMode.Specific)"
-                  Scale="1.0"
-                  EnableAccessibility="true" />
-}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Activo</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Certificados SSL</td>
+                    <td>[PKI] PKI - infraestructura de clave pública</td>
+                </tr>
+                <tr>
+                    <td>Archivos de comunicación</td>
+                    <td>[edi] intercambio electrónico de datos</td>
+                </tr>
+                <tr>
+                    <td>Dominios y subdominios</td>
+                    <td>[www] world wide web</td>
+                </tr>
+                <tr>
+                    <td>Documentos</td>
+                    <td>[file] almacenamiento de ficheros</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="button-container">
+        <EditForm Model="@this">
+            <button type="button" class="btn btn-primary" @onclick="UpdateReport">Generar Reporte</button>
+        </EditForm>
+    </div>
+
+    @if (estado == 1)
+    {
+        <ReportViewer @ref="reportViewer"
+                      ViewerId="rv1"
+                      ServiceUrl="/api/reports"
+                      ScaleMode="@(ScaleMode.Specific)"
+                      Scale="1.0"
+                      EnableAccessibility="true" />
+    }
+</div>
 
 @code {
     private ReportViewer reportViewer;

@@ -25,6 +25,8 @@ namespace ActivosControles.Data
 
                 actual.or_id = parts[1];
 
+                actual.us_tipo = parts[2];
+
             }
             else
             {

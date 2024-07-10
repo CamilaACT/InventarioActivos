@@ -1,0 +1,143 @@
+﻿@page "/nuevoEvaluador"
+@using ActivosControles.Data;
+@using ActivosControles.util.Request;
+@using ActivosControles.util.Respuesta;
+@layout MainLayout
+@inject Blazored.SessionStorage.ISessionStorageService session
+
+
+
+<PageTitle>Nuevo Evaluador</PageTitle>
+
+<style>
+    .company-form {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+    }
+
+        .company-form label {
+            margin-top: 10px;
+        }
+
+    .button-container {
+        margin-top: 20px;
+        text-align: right;
+    }
+
+    .evaluador-list {
+        max-width: 800px;
+        margin: 40px auto;
+    }
+
+        .evaluador-list h4 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+    .table thead {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+</style>
+
+<div class="container">
+    <h3 class="text-center my-4">Nuevo Evaluador</h3>
+
+    <div class="company-form">
+        <div class="form-group">
+            <label for="usNombre">Nombres del evaluador:</label>
+            <input type="text" id="usNombre" @bind="evaluador.us_nombre" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="usApellido">Apellidos del evaluador:</label>
+            <input type="text" id="usApellido" @bind="evaluador.us_apellido" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="usCedula">Cédula del evaluador:</label>
+            <input type="text" id="usCedula" @bind="evaluador.us_cedula" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="usuario">Usuario:</label>
+            <input type="text" id="usuario" @bind="evaluador.us_usuario" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="contrasenia">Contraseña:</label>
+            <input type="password" id="contrasenia" @bind="evaluador.us_contrasenia" class="form-control" />
+        </div>
+
+        <div class="button-container">
+            <button class="btn btn-primary" @onclick="AddEvaluador">Agregar Evaluador</button>
+        </div>
+    </div>
+
+    <div class="evaluador-list">
+        <h4>Lista de Evaluadores</h4>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nombre del Evaluador</th>
+                    <th>Cédula del Evaluador</th>
+                    <th>Usuario</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var evaluador in evaluadores)
+                {
+                    <tr>
+                        <td>@evaluador.nombre</td>
+                        <td>@evaluador.cedula</td>
+                        <td>@evaluador.usuario</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@code {
+    registraEvaluadorRequest evaluador = new registraEvaluadorRequest();
+    private usuariosesion sesionusua = new usuariosesion();
+
+    private listadoEvaluadores pedirevaluadores = new listadoEvaluadores();
+
+    List<Evaluador> evaluadores = new List<Evaluador>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await inicializarorganizacion();
+    }
+
+    private async Task inicializarorganizacion()
+    {
+
+        sesionusua = await session.GetItemAsync<usuariosesion>("SesionUsuario");
+
+        evaluador.or_codigo = sesionusua.or_id;
+
+        evaluadores = pedirevaluadores.retornalistaEvaluadores(sesionusua.or_id);
+
+    }
+
+    private void AddEvaluador()
+    {
+
+
+
+        registraEvaluador registrarev = new registraEvaluador();
+
+
+        registrarev.evaluador(evaluador);
+        evaluadores = pedirevaluadores.retornalistaEvaluadores(sesionusua.or_id);
+    }
+
+
+}

@@ -5,11 +5,11 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActivosControles", "ActivosControles.csproj", "{9ACF22FA-674D-4321-978D-FAF3DB145D1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivosControles.data", "..\ActivosControles.data\ActivosControles.data.csproj", "{0A27E42E-2459-4742-A5D8-45670FA9C1E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActivosControles.data", "..\ActivosControles.data\ActivosControles.data.csproj", "{0A27E42E-2459-4742-A5D8-45670FA9C1E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivosControles.model", "..\ActivosControles.model\ActivosControles.model.csproj", "{BE317247-C314-429B-B1F0-BBD84D3824AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActivosControles.model", "..\ActivosControles.model\ActivosControles.model.csproj", "{BE317247-C314-429B-B1F0-BBD84D3824AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivosControles.util", "..\ActivosControles.util\ActivosControles.util.csproj", "{875F8DFE-D47F-43C6-B1AC-7D65CE8442B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActivosControles.util", "..\ActivosControles.util\ActivosControles.util.csproj", "{875F8DFE-D47F-43C6-B1AC-7D65CE8442B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

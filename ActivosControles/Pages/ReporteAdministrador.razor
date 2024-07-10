@@ -1,0 +1,161 @@
+@page "/reportadmin"
+@using ActivosControles.Data;
+@using Telerik.ReportViewer.Blazor
+@using ActivosControles.util.Respuesta;
+@inject Blazored.SessionStorage.ISessionStorageService session
+@layout MainLayout
+
+<PageTitle>Valorización de Activos</PageTitle>
+
+<style>
+    .report-container {
+        text-align: center;
+        margin: 20px;
+    }
+
+    .report-header {
+        margin-bottom: 20px;
+    }
+
+        .report-header h1 {
+            margin-bottom: 10px;
+        }
+
+        .report-header p {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+    .trv-report-viewer {
+        width: 1300px;
+        height: 880px;
+        margin: 0 auto;
+    }
+
+    .button-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .select-container {
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="report-container">
+    <div class="report-header">
+        <h1>Valorización de Activos</h1>
+        <p>Se muestran los activos evaluados por dimensión y criterio</p>
+    </div>
+
+    <div class="select-container">
+        <label for="evaluadorSelect">Seleccione un evaluador:</label>
+        <select id="evaluadorSelect" @bind="selectedEvaluadorId" class="form-select">
+            <option value="" disabled>Seleccione un evaluador</option>
+            @foreach (var evaluador in evaluadores)
+            {
+                <option value="@evaluador.id">@evaluador.nombre</option>
+            }
+        </select>
+    </div>
+
+    <div class="button-container">
+        <EditForm Model="@this">
+            <button type="button" class="btn btn-primary" @onclick="UpdateReport">Generar Reporte</button>
+        </EditForm>
+    </div>
+
+    @if (estado == 1)
+    {
+        <ReportViewer @ref="reportViewer"
+                      ViewerId="rv1"
+                      ServiceUrl="/api/reports"
+                      ScaleMode="@(ScaleMode.Specific)"
+                      Scale="1.0"
+                      EnableAccessibility="true" />
+    }
+</div>
+
+@code {
+    private ReportViewer reportViewer;
+    private usuariosesion sesionusua = new usuariosesion();
+    private int estado;
+    private string selectedEvaluadorId;
+    private List<Evaluador> evaluadores = new List<Evaluador>();
+    private listadoEvaluadores pedirevaluadores = new listadoEvaluadores();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await inicializarListaAsync();
+        await LoadEvaluadoresAsync();
+    }
+
+    private async Task inicializarListaAsync()
+    {
+        try
+        {
+            sesionusua = await session.GetItemAsync<usuariosesion>("SesionUsuario");
+
+            if (sesionusua == null)
+            {
+                // Manejar el caso donde la sesión no se recupera correctamente
+                Console.WriteLine("No se pudo recuperar la sesión del usuario.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al recuperar la sesión del usuario: {ex.Message}");
+        }
+    }
+
+    private async Task LoadEvaluadoresAsync()
+    {
+        if (sesionusua != null)
+        {
+            evaluadores = pedirevaluadores.retornalistaEvaluadores(sesionusua.or_id.ToString());
+        }
+    }
+
+    void UpdateReport()
+    {
+        int or_codigo;
+        int us_codigo;
+        estado = 1;
+
+        if (!int.TryParse(sesionusua.or_id, out or_codigo))
+        {
+            or_codigo = 0;
+        }
+
+        if (!int.TryParse(selectedEvaluadorId, out us_codigo))
+        {
+            us_codigo = 0;
+        }
+
+        try
+        {
+            if (reportViewer != null)
+            {
+                var reporte = new ReportSourceOptions
+                    {
+                        Report = "ValorizacionActivos.trdp",
+                        Parameters = new Dictionary<string, object>
+                    {
+                        { "or_id", or_codigo },
+                        { "us_id", us_codigo }
+                    }
+                    };
+
+                reportViewer.SetReportSourceAsync(reporte);
+            }
+            else
+            {
+                Console.WriteLine("reportViewer es null.");
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error al actualizar el reporte: {e.Message}");
+        }
+    }
+}

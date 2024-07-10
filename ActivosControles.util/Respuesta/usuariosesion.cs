@@ -11,5 +11,6 @@ namespace ActivosControles.util.Respuesta
         public int CodigoError { get; set; }
         public string or_id { get; set; }
         public string us_id { get; set; }
+        public string us_tipo { get; set; }
     }
 }

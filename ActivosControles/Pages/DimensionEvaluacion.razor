@@ -1,0 +1,275 @@
+﻿@page "/informacion"
+@using ActivosControles.util.Respuesta;
+@layout MainLayout
+
+<PageTitle>Información de Evaluación</PageTitle>
+
+<style>
+    .container {
+        margin: 20px auto;
+        max-width: 1200px;
+    }
+
+    .section {
+        margin-bottom: 40px;
+    }
+
+        .section h3 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+    .table-container {
+        margin: 0 auto;
+        max-width: 800px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f4f4f4;
+        text-align: left;
+    }
+
+    tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+</style>
+
+<div class="container">
+    <div class="section">
+        <h3>Dimensiones</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Dimensión</th>
+                        <th>Definición</th>
+                        <th>Cuestionamiento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>[D] Disponibilidad</td>
+                        <td>Propiedad o característica de los activos consistente en que las entidades o procesos autorizados tienen acceso a los mismos cuando lo requieren. [UNE 71504:2008]</td>
+                        <td>¿Qué importancia tendría que el activo no estuviera disponible?</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>[I] Integridad</td>
+                        <td>Propiedad o característica consistente en que el activo de información no ha sido alterado de manera no autorizada. [ISO/IEC 13335-1:2004]</td>
+                        <td>¿Qué importancia tendría que los datos fueran modificados fuera de control?</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>[C] Confidencialidad</td>
+                        <td>Propiedad o característica consistente en que la información ni se pone a disposición, ni se revela a individuos, entidades o procesos no autorizados. [UNE-ISO/IEC 27001:2007]</td>
+                        <td>¿Qué importancia tendría que el dato fuera conocido por personas no autorizadas?</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>[A] Autenticidad</td>
+                        <td>Propiedad o característica consistente en que una entidad es quien dice ser o bien que garantiza la fuente de la que proceden los datos. [UNE 71504:2008]</td>
+                        <td>¿Qué importancia tendría que quien accede al servicio no sea realmente quien se cree?</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="section">
+        <h3>Escala de Valor</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Valor</th>
+                        <th>Representación</th>
+                        <th>Criterio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>5</td>
+                        <td>Extremo</td>
+                        <td>Daño extremadamente grave</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Muy alto</td>
+                        <td>Daño muy grave</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Alto</td>
+                        <td>Daño grave</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Medio</td>
+                        <td>Daño importante</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Bajo</td>
+                        <td>Daño menor</td>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>Despreciable</td>
+                        <td>Irrelevante a efectos prácticos</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>Criterios</h3>
+        <div class="table-container">
+            <h4>[leype] Leyes de Información y datos carácter personal</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Valor</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>5</td>
+                        <td>Probablemente afecte gravemente a un individuo o grupo de individuos y probablemente quebrante gravemente leyes o regulaciones.</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Probablemente afecte a un grupo de individuos y probablemente quebrante leyes o regulaciones.</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Probablemente afecte a un individuo y probablemente suponga el incumplimiento de una ley o regulación.</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Pudiera causar molestias a un individuo y pudiera quebrantar de forma leve leyes o regulaciones.</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Pudiera causar molestias a un individuo y pudiera quebrantar de forma leve. Al caso de Ecuador, esta rúbrica debería ser concordante con lo estipulado en Ley de Protección de Datos Personales, promulgada en 2021.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-container">
+            <h4>[si] Seguridad</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Valor</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>5</td>
+                        <td>Probablemente sea causa de un grave incidente de seguridad o dificulte la investigación de incidentes graves.</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Probablemente sea causa de una merma en la seguridad o dificulte la investigación de un incidente.</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Pudiera causar una merma en la seguridad o dificultar la investigación de un incidente.</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Pudiera causar una merma en la seguridad o dificultar la investigación de un incidente, pero a un nivel menor.</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>No tendría un impacto significativo en la seguridad o en la investigación de incidentes.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-container">
+            <h4>[adm] Administración y Gestión</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Valor</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>5</td>
+                        <td>Probablemente impediría la operación efectiva de la organización.</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Probablemente impediría la operación efectiva de más de una parte de la organización.</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Probablemente impediría la operación efectiva de una parte de la organización.</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Pudiera impedir la operación efectiva de una parte de la organización.</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Pudiera impedir la operación efectiva de una parte de la organización, pero a un nivel menor.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-container">
+            <h4>[conf] Perdida de Confianza</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Valor</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>5</td>
+                        <td>Probablemente causaría una publicidad negativa generalizada y afectaría gravemente las relaciones con otras organizaciones o el público en general.</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Probablemente causaría una publicidad negativa significativa y afectaría gravemente las relaciones con otras organizaciones o el público en general.</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Probablemente afecte negativamente a las relaciones internas de la organización.</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Probablemente cause una pérdida menor de la confianza dentro de la organización.</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Pudiera causar una pérdida menor de la confianza dentro de la organización.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

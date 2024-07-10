@@ -87,6 +87,11 @@
                         {
                             <div class="alert alert-danger">@errorMessage</div>
                         }
+
+                        <div class="mt-3">
+                            <a href="/counter" class="text-primary">Registrar mi compañía</a>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -98,7 +103,8 @@
     private usuario loginModel = new usuario();
     private loginAccion loginaccion = new loginAccion();
     private usuariosesion usuariosesion = new usuariosesion();
-
+    private List<string> validaciones = new List<string>();
+    private validarEscaneo validarEscaneo = new validarEscaneo();
     private usuariosesion prueba = new usuariosesion();
 
     private string errorMessage;
@@ -109,9 +115,12 @@
         if (usuariosesion.CodigoError == -1)
         {
             await session.SetItemAsync("SesionUsuario", usuariosesion);
-            Navigation.NavigateTo("/");
 
+            // Obtener y guardar las validaciones
+            validaciones = validarEscaneo.validar(usuariosesion.or_id);
+            await session.SetItemAsync("Validaciones", validaciones);
 
+            Navigation.NavigateTo("/fetchdata");
         }
         else
         {

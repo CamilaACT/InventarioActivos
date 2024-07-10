@@ -6,7 +6,7 @@
 @inject WeatherForecastService ForecastService
 @inject Blazored.SessionStorage.ISessionStorageService session
 
-<PageTitle>Evaluacion</PageTitle>
+<PageTitle>Evaluar activos</PageTitle>
 
 <style>
     .rating-bar {
@@ -87,7 +87,7 @@
                     <tr>
                         <th>Código</th>
                         <th>Activos</th>
-                        <th>Estado</th>
+                        
                         <th>Seleccionar</th>
                     </tr>
                 </thead>
@@ -97,7 +97,7 @@
                         <tr>
                             <td>@asset.id</td>
                             <td>@asset.nombre</td>
-                            <td>@asset.estado</td>
+                            
                             <td>
                                 <button class="btn btn-primary" @onclick="() => SelectAsset(asset)">Seleccionar</button>
                             </td>
